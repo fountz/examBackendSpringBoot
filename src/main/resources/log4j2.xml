@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <!-- Appenders define where the logs will go (console, file, etc.) -->
+    <Appenders>
+        <!-- Console Appender (prints logs to console) -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} - %msg%n%throwable"/>
+        </Console>
+
+        <!-- File Appender (writes logs to a file) -->
+        <File name="File" fileName="C:\Users\65768\OneDrive - DataOne Asia (Thailand) Co.,Ltd\Desktop\works\ttb\examBackendSpringBoot\src\main\resources\logs\app.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} - %msg%n%throwable"/>
+        </File>
+    </Appenders>
+
+    <!-- Loggers define logging behavior for different log levels -->
+    <Loggers>
+        <!-- Root Logger -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+
+        <!-- Example of a custom logger for specific package -->
+        <Logger name="th.co.ttb.exam" level="debug">
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>
+
