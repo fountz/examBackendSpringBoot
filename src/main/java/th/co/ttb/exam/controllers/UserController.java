@@ -18,7 +18,7 @@ import th.co.ttb.exam.services.UserService;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
+@CrossOrigin(origins = "http://localhost:3000") // หรือ URL ที่ React ทำงาน
 @RestController
 @RequestMapping("/apis/user")
 public class UserController {
@@ -80,7 +80,8 @@ public class UserController {
         try {
             if (req.getString("uuid") != null) {
                 LOG.info("SUCCESS => apis/user/delete : " + req);
-                return ResponseEntity.ok(userService.delete(req.getString("uuid")));
+                userService.delete(req.getString("uuid"));
+                return ResponseEntity.ok("success");
             } else {
                 LOG.error("WARN => apis/user/delete : " + req);
                 return ResponseEntity.internalServerError().body(new ApiResponseError("US0001", "Can not remove user"));
@@ -99,17 +100,17 @@ public class UserController {
         try {
             if (req.getString("uuid") != null) {
                 User user = userService.findById(req.getString("uuid"));
-                String oldPasswordHash = md5Encode(req.getString("oldPassword"));
+//                String oldPasswordHash = md5Encode(req.getString("oldPassword"));
                 String newPasswordHash = md5Encode(req.getString("newPassword"));
-                if (user.getPassword() == null || user.getPassword().equals("") || user.getPassword().equals(oldPasswordHash)) {
+//                if (user.getPassword() == null || user.getPassword().equals("") || user.getPassword().equals(oldPasswordHash)) {
                     user.setPassword(newPasswordHash);
                     userService.save(user);
                     LOG.info("SUCCESS => apis/user/changePWD : " + req);
                     return ResponseEntity.ok("success");
-                } else {
-                    LOG.error("ERROR => apis/user/changePWD wrong password : " + req);
-                    return ResponseEntity.internalServerError().body(new ApiResponseError("US0001", "wrong password"));
-                }
+//                } else {
+//                    LOG.error("ERROR => apis/user/changePWD wrong password : " + req);
+//                    return ResponseEntity.internalServerError().body(new ApiResponseError("US0001", "wrong password"));
+//                }
             } else {
                 LOG.error("ERROR => apis/user/changePWD : " + req);
                 return ResponseEntity.internalServerError().body(new ApiResponseError("US0001", "uuid is empty"));
@@ -170,7 +171,8 @@ public class UserController {
             if (req.getString("email") != null) {
                 Boolean check = userService.findByEmail(req.getString("email"));
                 LOG.info("SUCCESS => apis/user/checkmail : " + req);
-                return ResponseEntity.ok(check);
+                String checkString=check?"success":"error";
+                return ResponseEntity.ok(checkString);
             } else {
                 LOG.error("ERROR => apis/user/checkmail data empty : " + req);
                 return ResponseEntity.internalServerError().body(new ApiResponseError("US0001", "data empty"));
